@@ -301,6 +301,14 @@ def make_averaged(g, num_samples=1000):
     """
     # BEGIN PROBLEM 8
     "*** YOUR CODE HERE ***"
+    def get_average(*args):
+        i = 1
+        total = 0
+        while i <= num_samples: 
+            total += g(*args)
+            i += 1
+        return total/num_samples
+    return get_average
     # END PROBLEM 8
 
 
@@ -315,6 +323,15 @@ def max_scoring_num_rolls(dice=six_sided, num_samples=1000):
     """
     # BEGIN PROBLEM 9
     "*** YOUR CODE HERE ***"
+    i = 1
+    average_f = make_averaged(roll_dice, num_samples)
+    highest_average, highest_roll= 0, 0
+    while i <= 10:
+        current_average = average_f(i, dice)
+        if highest_average < current_average:
+            highest_average, highest_roll =  current_average, i
+        i += 1
+    return highest_roll
     # END PROBLEM 9
 
 
@@ -364,7 +381,9 @@ def bacon_strategy(score, opponent_score, margin=8, num_rolls=6):
     rolls NUM_ROLLS otherwise.
     """
     # BEGIN PROBLEM 10
-    return 6  # Replace this statement
+    if free_bacon(opponent_score) >= margin:
+        return 0
+    return num_rolls
     # END PROBLEM 10
 
 
@@ -374,18 +393,27 @@ def swap_strategy(score, opponent_score, margin=8, num_rolls=6):
     non-beneficial swap. Otherwise, it rolls NUM_ROLLS.
     """
     # BEGIN PROBLEM 11
-    return 6  # Replace this statement
+    bacon = free_bacon(opponent_score)
+    if (is_swap(score + bacon, opponent_score)):
+        if (score + bacon < opponent_score):
+            return 0
+    elif bacon >= margin:
+        return 0
+    return num_rolls
     # END PROBLEM 11
 
 
 def final_strategy(score, opponent_score):
     """Write a brief description of your final strategy.
 
-    *** YOUR DESCRIPTION HERE ***
+    I need ideas for this, coming back later (I'm lazy)
     """
     # BEGIN PROBLEM 12
-    return 6  # Replace this statement
+    if (score >= 90):
+        return bacon_strategy(score, opponent_score, margin=2)
+    return bacon_strategy(score, opponent_score)
     # END PROBLEM 12
+
 
 ##########################
 # Command Line Interface #
